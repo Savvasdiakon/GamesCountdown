@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .game-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px 0;
+      }
+
+      .game-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .countdown {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Upcoming Game Releases</h1>
+    <div id="game-list">
+      <!-- games will be added here dynamically -->
+    </div>
+
+    <script>
+      // sample data for the upcoming games
+      const games = [
+        {
+          title: "Game 1",
+          releaseDate: "2023-02-20T00:00:00Z"
+        },
+        {
+          title: "Game 2",
+          releaseDate: "2023-02-25T00:00:00Z"
+        },
+        {
+          title: "Game 3",
+          releaseDate: "2023-02-15T00:00:00Z"
+        }
+      ];
+
+      const gameListContainer = document.getElementById("game-list");
+
+      // function to create the countdown clock for each game
+      function createCountdown(releaseDate) {
+        const countDownDate = new Date(releaseDate).getTime();
+        const x = setInterval(function() {
+          const now = new Date().getTime();
+          const distance = countDownDate - now;
+
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          const countdown =
+            days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+          document.getElementById(releaseDate).innerHTML = countdown;
+
+          if (distance < 0) {
+            clearInterval(x);
+            document.getElementById(releaseDate).innerHTML = "RELEASED";
+          }
+        }, 1000);
+      }
+
+      // function to add a game to the list
+      function addGameToList(game) {
+        const gameItem = document.createElement("div");
+        gameItem.classList.add("game-item");
+
+        const title = document.createElement("div");
+        title.classList.add("game-title");
+        title.innerText = game.title;
+        gameItem.appendChild(title);
+
+        const countdown = document.createElement("div");
+        countdown.classList.add("countdown");
+        countdown.id = game.releaseDate;
+        gameItem.appendChild(
